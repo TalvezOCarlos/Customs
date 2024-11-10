@@ -15,6 +15,7 @@ function s.initial_effect(c)
 	e1:SetOperation(s.mlop)
 	c:RegisterEffect(e1)
 end
+s.listed_series={0xa12f}
 function s.mlcos(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsPlayerCanDiscardDeckAsCost(tp,3) end
 	Duel.DiscardDeck(tp,3,REASON_COST)
