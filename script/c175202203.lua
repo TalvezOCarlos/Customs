@@ -4,7 +4,7 @@
 local s,id=GetID()
 function s.initial_effect(c)
 	-- 2 Level 4 Useless monsters
-	Xyz.AddProcedure(c,IsSetCard(0xa12f),4,2)
+	Xyz.AddProcedure(c,aux.FilterBoolFunctionEx(Card.IsSetCard(0xa12f)),4,2)
     c:EnableReviveLimit()
 	-- Can use Equip spells as material
 	local e0=Effect.CreateEffect(c)
@@ -37,6 +37,7 @@ function s.initial_effect(c)
 end
 s.listed_series={0xa12f}
 s.listed_names={175202201}
+
 function s.cost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return e:GetHandler():CheckRemoveOverlayCard(tp,1,REASON_COST) and Duel.IsPlayerCanDiscardDeckAsCost(tp,3) end
     e:GetHandler():RemoveOverlayCard(tp,1,REASON_COST)
