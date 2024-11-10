@@ -6,7 +6,6 @@ function s.initial_effect(c)
     aux.AddEquipProcedure(c,nil,aux.FilterBoolFunction(Card.IsSetCard,0xa12f))
 	--Add a "Useless" card from GY to hand
 	local e1=Effect.CreateEffect(c)
-	e1:SetDescription(aux.Stringid(id,3))
 	e1:SetCategory(CATEGORY_TOHAND)
 	e1:SetType(EFFECT_TYPE_IGNITION)
 	e1:SetRange(LOCATION_SZONE)
@@ -36,8 +35,9 @@ function s.mlop(e,tp,eg,ep,ev,re,r,rp,chk)
 	local g=Duel.SelectMatchingCard(tp,Card.IsAbleToDeck,tp,LOCATION_GRAVE,0,1,1,nil)
 	if #g>0 then
 		Duel.SendtoDeck(g,tp,SEQ_DECKSHUFFLE,REASON_EFFECT)
-		g=Duel.SelectMatchingCard(tp,s.mlfh,tp,LOCATION_GRAVE,0,1,1,nil)
-		if #g>0 and Duel.SelectYesNo(tp, aux.Stringid(id,3)) then
+		if Duel.SelectYesNo(tp, aux.Stringid(id,2)) then
+			Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
+			local g=Duel.SelectMatchingCard(tp,s.mlfh,tp,LOCATION_GRAVE,0,1,1,nil)
 			Duel.SendtoHand(g,nil,REASON_EFFECT)
 			Duel.ConfirmCards(tp,g)
 		end
