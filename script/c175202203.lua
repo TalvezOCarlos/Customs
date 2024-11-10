@@ -6,16 +6,6 @@ function s.initial_effect(c)
 	-- 2 Level 4 Useless monsters
 	Xyz.AddProcedure(c,aux.FilterBoolFunctionEx(Card.IsSetCard,0xa12f),4,2)
     c:EnableReviveLimit()
-	-- Can use Equip spells as material
-	local e0=Effect.CreateEffect(c)
-	e0:SetType(EFFECT_TYPE_FIELD)
-	e0:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_IGNORE_IMMUNE)
-	e0:SetCode(EFFECT_XYZ_LEVEL)
-	e0:SetRange(LOCATION_EXTRA)
-	e0:SetTargetRange(LOCATION_SZONE,0)
-	e0:SetTarget(function(e,c) return c:IsType(c,TYPE_EQUIP) and c:IsSetCard(0xa12f) end)
-	e0:SetValue(function(e,_,rc) return rc==e:GetHandler() and 4 or 0 end)
-	c:RegisterEffect(e0)
 	-- Name Change
     local e1=Effect.CreateEffect(c)
     e1:SetType(EFFECT_TYPE_SINGLE)
