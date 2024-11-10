@@ -21,15 +21,15 @@ function s.initial_effect(c)
 	e2:SetProperty(EFFECT_FLAG_DELAY)
 	e2:SetCode(EVENT_SPSUMMON_SUCCESS)
 	e2:SetCountLimit(1,id)
-	e2:SetCost(s.cost)
-    e2:SetCondition(s.condition)
+	e2:SetCondition(s.condition)
+    e2:SetCost(s.cost)
 	e2:SetOperation(s.operation)
 	c:RegisterEffect(e1)
 end
 s.listed_series={0xa12f}
 s.listed_names={175202201}
 function s.condition(e,tp,eg,ep,ev,re,r,rp)
-	return e:GetHandler():IsSummonType(SUMMON_TYPE_SPECIAL)
+	return e:GetHandler():IsSummonType(SUMMON_TYPE_XYZ)
 end
 function s.cost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return e:GetHandler():CheckRemoveOverlayCard(tp,1,REASON_COST) and Duel.IsPlayerCanDiscardDeckAsCost(tp,3) end
