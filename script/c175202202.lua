@@ -21,7 +21,7 @@ function s.mlcos(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.DiscardDeck(tp,3,REASON_COST)
 end
 function s.filter(c)
-    return c:IsSetCard(0xa12f) and c:IsAbleToHand
+    return c:IsSetCard(0xa12f) and c:IsAbleToHand()
 end
 function s.mlop(e,tp,eg,ep,ev,re,r,rp,chk)
     Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
