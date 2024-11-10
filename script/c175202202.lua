@@ -28,14 +28,20 @@ function s.mlcos(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsPlayerCanDiscardDeckAsCost(tp,3) end
 	Duel.DiscardDeck(tp,3,REASON_COST)
 end
-function s.filter(c)
+function s.mlfh(c)
     return c:IsSetCard(0xa12f) and c:IsAbleToHand()
 end
 function s.mlop(e,tp,eg,ep,ev,re,r,rp,chk)
-    Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
-	local g=Duel.SelectMatchingCard(tp,aux.NecroValleyFilter(s.filter),tp,LOCATION_GRAVE,0,1,1,nil)
+    Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
+	local g=Duel.SelectMatchingCard(Card.IsAbleToDeck,tp,LOCATION_GRAVE,0,1,nil)
 	if #g>0 then
-		Duel.SendtoHand(g,nil,REASON_EFFECT)
-		Duel.ConfirmCards(1-tp,g)
+		Duel.SendtoDeck(g,nil,REASON_EFFECT) then
+			g=Duel.SelectMatchingCard(s.mlfh,tp,LOCATION_GRAVE,0,1,nil)
+			if #g>0 and Duel.SelectYesNo(tp, aux.Stringid(id,3)) then
+				Duel.SendtoHand(g,nil,REASON_EFFECT)
+				Duel.ConfirmCards(tp,g)
+			end
+		end
 	end
+
 end
