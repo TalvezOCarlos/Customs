@@ -35,12 +35,11 @@ function s.mlop(e,tp,eg,ep,ev,re,r,rp,chk)
     Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
 	local g=Duel.SelectMatchingCard(Card.IsAbleToDeck,tp,LOCATION_GRAVE,0,1,nil)
 	if #g>0 then
-		Duel.SendtoDeck(g,nil,REASON_EFFECT) then
-			g=Duel.SelectMatchingCard(s.mlfh,tp,LOCATION_GRAVE,0,1,nil)
-			if #g>0 and Duel.SelectYesNo(tp, aux.Stringid(id,3)) then
-				Duel.SendtoHand(g,nil,REASON_EFFECT)
-				Duel.ConfirmCards(tp,g)
-			end
+		Duel.SendtoDeck(g,nil,REASON_EFFECT)
+		g=Duel.SelectMatchingCard(s.mlfh,tp,LOCATION_GRAVE,0,1,nil)
+		if #g>0 and Duel.SelectYesNo(tp, aux.Stringid(id,3)) then
+			Duel.SendtoHand(g,nil,REASON_EFFECT)
+			Duel.ConfirmCards(tp,g)
 		end
 	end
 
