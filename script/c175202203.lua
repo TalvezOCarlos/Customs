@@ -4,7 +4,7 @@
 local s,id=GetID()
 function s.initial_effect(c)
 	-- 2 Level 4 Useless monsters
-	Xyz.AddProcedure(c,aux.FilterBoolFunctionEx(Card.IsSetCard(0xa12f)),4,2)
+	Xyz.AddProcedure(c,aux.FilterBoolFunctionEx(Card.IsSetCard,0xa12f),4,2)
     c:EnableReviveLimit()
 	-- Can use Equip spells as material
 	local e0=Effect.CreateEffect(c)
