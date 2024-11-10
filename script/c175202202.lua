@@ -11,6 +11,7 @@ function s.initial_effect(c)
 	e1:SetRange(LOCATION_SZONE)
 	e1:SetCountLimit(1,id)
 	e1:SetCost(s.mlcos)
+	e1:SetTarget(s.mltg)
 	e1:SetOperation(s.mlop)
 	c:RegisterEffect(e1)
 	--Xyz
@@ -26,6 +27,9 @@ s.listed_series={0xa12f}
 function s.mlcos(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsPlayerCanDiscardDeckAsCost(tp,3) end
 	Duel.DiscardDeck(tp,3,REASON_COST)
+end
+function s.mltg(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return Duel.IsExistingMatchingCard(Card.IsAbleToDeck,tp,LOCATION_GRAVE,0,1,nil) end
 end
 function s.mlfh(c)
     return c:IsSetCard(0xa12f) and c:IsAbleToHand()
