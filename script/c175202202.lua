@@ -6,7 +6,7 @@ function s.initial_effect(c)
     aux.AddEquipProcedure(c,nil,aux.FilterBoolFunction(Card.IsSetCard,0xa12f))
 	--Add a "Useless" card from GY to hand
 	local e1=Effect.CreateEffect(c)
-	e1:SetDescription(aux.Stringid(id,0))
+	e1:SetDescription(aux.Stringid(id,3))
 	e1:SetCategory(CATEGORY_TOHAND)
 	e1:SetType(EFFECT_TYPE_IGNITION)
 	e1:SetRange(LOCATION_SZONE)
@@ -14,6 +14,14 @@ function s.initial_effect(c)
 	e1:SetCost(s.mlcos)
 	e1:SetOperation(s.mlop)
 	c:RegisterEffect(e1)
+	--Xyz
+	local e2=Effect.CreateEffect(c)
+	e2:SetType(EFFECT_TYPE_SINGLE)
+	e2:SetProperty(EFFECT_FLAG_SINGLE_RANGE)
+	e2:SetCode(511001175)
+	e2:SetRange(LOCATION_SZONE)
+	e2:SetCountLimit(1,id)
+	c:RegisterEffect(e2)
 end
 s.listed_series={0xa12f}
 function s.mlcos(e,tp,eg,ep,ev,re,r,rp,chk)
