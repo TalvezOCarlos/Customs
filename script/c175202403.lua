@@ -14,17 +14,6 @@ function s.initial_effect(c)
 	e1:SetTarget(s.sptg)
 	e1:SetOperation(s.spop)
 	c:RegisterEffect(e1)
-	-- Add 1 Level 3 or lower Fiend Tuner monster from your Deck to your hand
-	local e2=Effect.CreateEffect(c)
-	e2:SetDescription(aux.Stringid(id,1))
-	e2:SetCategory(CATEGORY_TOHAND+CATEGORY_SEARCH)
-	e2:SetType(EFFECT_TYPE_IGNITION)
-	e2:SetRange(LOCATION_HAND)
-	e2:SetCountLimit(1,{id,1})
-	e2:SetCost(s.thcost)
-	e2:SetTarget(s.thtg)
-	e2:SetOperation(s.thop)
-	c:RegisterEffect(e2)
 end
 
 s.listed_series={0xa13f}
