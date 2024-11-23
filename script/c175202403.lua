@@ -96,7 +96,7 @@ function s.thop(e,tp,eg,ep,ev,re,r,rp)
         Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SUMMON)
 	    local g=Duel.SelectMatchingCard(tp,s.nsfilter,tp,LOCATION_HAND,0,1,1,nil)
         if #g>0 then
-            Duel.Summon(tp,tc,true,e)
+            Duel.Summon(tp,g,true,e)
         end
     end
 end
