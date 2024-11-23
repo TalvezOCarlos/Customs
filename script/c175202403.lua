@@ -23,9 +23,8 @@ end
 function s.spfilter(c)
     return c:IsSetCard({0xa13f}) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
-function s.spcon(e,c)
+function s.spcon(e,c,tp)
 	if c==nil then return true end
-    local tp=c:GetHandler()
     return Duel.IsExistingMatchingCard(s.spiritfilter,tp,LOCATION_MZONE,0,1,nil)
 end
 function s.spcost(e,tp,eg,ep,ev,re,r,rp,chk)
