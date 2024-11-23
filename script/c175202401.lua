@@ -27,6 +27,7 @@ function s.thsetcon(e,tp,eg,ep,ev,re,r,rp)
 	return c:GetTurnID()==Duel.GetTurnCount() and c:IsPreviousLocation(LOCATION_ONFIELD)
 end
 function s.thsetop(e,tp,eg,ep,ev,re,r,rp)
-	local c=e:GetHandler()
-	Duel.AddtoHand(c,REASON_EFFECT)
+	local g=e:GetHandler()
+	Duel.SendtoHand(g,nil,REASON_EFFECT)
+	Duel.ComfirmCards(1-tp,g)
 end
