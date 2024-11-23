@@ -74,28 +74,30 @@ function s.thfilter(c)
 end
 function s.spcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
-	if chk==0 then return Duel.IsExistingMatchingCard(Card.IsAbleToGraveAsCost,tp,LOCATION_HAND,0,1,c) end
+	if chk==0 then return end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOGRAVE)
 	local g=Duel.SelectMatchingCard(tp,Card.IsAbleToGraveAsCost,tp,LOCATION_HAND,0,1,1,c)
     Duel.SendtoGrave(g,REASON_COST)
 end
 function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
-    if chk==0 then return Duek.IsExistingMatchingCard(s.thfilter,tp,LOCATION_DECK,0,1,nil,e,tp) end
+    if chk==0 then return Duel.IsExistingMatchingCard(s.thfilter,tp,LOCATION_DECK,0,1,nil,e,tp) end
     Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK)
 end
 function s.thop(e,tp,eg,ep,ev,re,r,rp)
     Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
-	local tc=Duel.SelectMatchingCard(tp,aux.NecroValleyFilter(s.thfilter),tp,LOCATION_DECK,0,1,1,nil):GetFirst()
-	if not (tc and Duel.SendtoHand(tc,nil,REASON_EFFECT)>0 and tc:IsLocation(LOCATION_HAND)) then return end
+	local tc=Duel.SelectMatchingCard(tp,s.thfilter,tp,LOCATION_DECK,0,1,1,nil):GetFirst()
+	if #tc >0 then
+        Duel.SendtoHand(tc,nil,REASON_EFFECT)
+    end
 	Duel.ConfirmCards(1-tp,tc)
 	Duel.ShuffleHand(tp)
-	--if Duel.IsExistingMatchingCard(s.nsfilter,tp,LOCATION_HAND,0,1,c) then
-  --      if Duel.SelectYesNo(tp,aux.Stringid(id,2)) then
-  --          Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SUMMON)
-	--        local tc=Duel.SelectMatchingCard(tp,aux.NecroValleyFilter(s.nsfilter),tp,LOCATION_HAND,0,1,1,nil):GetFirst()
-  --          if #tc>0 then
-  --              Duel.Summon(tp,tc,true,e)
-  --          end
-  --      end
- --   end
+	if Duel.IsExistingMatchingCard(s.nsfilter,tp,LOCATION_HAND,0,1,c) then
+        if Duel.SelectYesNo(tp,aux.Stringid(id,2)) then
+            Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SUMMON)
+	        local tc=Duel.SelectMatchingCard(tp,aux.NecroValleyFilter(s.nsfilter),tp,LOCATION_HAND,0,1,1,nil):GetFirst()
+            if #tc>0 then
+                Duel.Summon(tp,tc,true,e)
+            end
+        end
+    end
 end
