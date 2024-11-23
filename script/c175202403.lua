@@ -86,11 +86,11 @@ function s.thcost(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 function s.thop(e,tp,eg,ep,ev,re,r,rp)
     Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
-	local g=Duel.SelectMatchingGroup(tp,s.thfilter,tp,LOCATION_DECK,0,1,1,nil)
+	local g=Duel.SelectMatchingCard(tp,s.thfilter,tp,LOCATION_DECK,0,1,1,nil)
 	if #g >0 then
         Duel.SendtoHand(g,nil,REASON_EFFECT)
 	    Duel.ConfirmCards(1-tp,g)
-        local sg1=Duel.GetMatchingCard(s.nsfilter,tp,LOCATION_HAND+LOCATION_MZONE,0,nil)
+        local sg1=Duel.GetMatchingGroup(s.nsfilter,tp,LOCATION_HAND+LOCATION_MZONE,0,nil)
         if #sg1>0 and Duel.SelectYesNo(tp,aux.Stringid(id,2)) then
             Duel.BreakEffect()
             Duel.ShuffleHand(tp)
