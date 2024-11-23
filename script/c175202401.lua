@@ -13,12 +13,11 @@ function s.initial_effect(c)
 	local e2=Effect.CreateEffect(c)
 	e2:SetDescription(aux.Stringid(id,0))
 	e2:SetCategory(CATEGORY_TOHAND)
-	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
+	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER)
 	e2:SetCode(EVENT_PHASE+PHASE_END)
 	e2:SetRange(LOCATION_GRAVE)
 	e2:SetCountLimit(1,id)
 	e2:SetCondition(s.thsetcon)
-	e2:SetTarget(s.thsettg)
 	e2:SetOperation(s.thsetop)
 	c:RegisterEffect(e2)
 end
@@ -26,9 +25,6 @@ end
 function s.thsetcon(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	return c:GetTurnID()==Duel.GetTurnCount() and c:IsPreviousLocation(LOCATION_ONFIELD)
-end
-function s.thsettg(e,tp,eg,ep,ev,re,r,rp,chk)
-	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_GRAVE)
 end
 function s.thsetop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
