@@ -89,13 +89,13 @@ function s.thop(e,tp,eg,ep,ev,re,r,rp)
 	if not (tc and Duel.SendtoHand(tc,nil,REASON_EFFECT)>0 and tc:IsLocation(LOCATION_HAND)) then return end
 	Duel.ConfirmCards(1-tp,tc)
 	Duel.ShuffleHand(tp)
-	if Duel.IsExistingMatchingCard(s.nsfilter,tp,LOCATION_HAND,0,1,c) then
-        if Duel.SelectYesNo(tp,aux.Stringid(id,2)) then
-            Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SUMMON)
-	        local tc=Duel.SelectMatchingCard(tp,aux.NecroValleyFilter(s.nsfilter),tp,LOCATION_HAND,0,1,1,nil):GetFirst()
-            if #tc>0 then
-                Duel.Summon(tp,tc,true,e)
-            end
-        end
-    end
+	--if Duel.IsExistingMatchingCard(s.nsfilter,tp,LOCATION_HAND,0,1,c) then
+  --      if Duel.SelectYesNo(tp,aux.Stringid(id,2)) then
+  --          Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SUMMON)
+	--        local tc=Duel.SelectMatchingCard(tp,aux.NecroValleyFilter(s.nsfilter),tp,LOCATION_HAND,0,1,1,nil):GetFirst()
+  --          if #tc>0 then
+  --              Duel.Summon(tp,tc,true,e)
+  --          end
+  --      end
+ --   end
 end
