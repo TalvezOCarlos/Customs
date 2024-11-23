@@ -17,19 +17,19 @@ function s.initial_effect(c)
 end
 
 s.listed_series={0xa13f}
-function s.spiritfilter(c)
-    return c:IsType(TYPE_SPIRIT)
+function s.spconfilter(c)
+    return c:IsType(TYPE_SPIRIT) and c:IsFaceup()
 end
 function s.spfilter(c)
     return c:IsSetCard({0xa13f}) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
-function s.spcon(e,c,tp)
+function s.spcon(e,tp,eg,ep,ev,re,r,rp)
 	if c==nil then return true end
-    return Duel.IsExistingMatchingCard(s.spiritfilter,0,LOCATION_MZONE,0,1,nil)
+    return Duel.IsExistingMatchingCard(s.spconfilter,tg,LOCATION_MZONE,0,1,nil)
 end
 function s.spcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
-	if chk==0 then return Duel.IsExistingMatchingCard(Card.IsAbleToGraveAsCost,tp,LOCATION_HAND,0,1,c) and not c:IsPublic() end
+	if chk==0 then return Duel.IsExistingMatchingCard(Card.IsAbleToGraveAsCost,tp,LOCATION_HAND,0,1,c) and (not c:IsPublic()) end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOGRAVE)
 	local g=Duel.SelectMatchingCard(tp,Card.IsAbleToGraveAsCost,tp,LOCATION_HAND,0,1,1,c)
     Duel.SendtoGrave(g,REASON_COST)
