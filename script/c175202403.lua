@@ -86,7 +86,7 @@ function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 function s.thop(e,tp,eg,ep,ev,re,r,rp)
     Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
-	local tc=Duel.SelectMatchingCard(tp,s.thfilter,tp,LOCATION_DECK,0,1,1,nil):GetFirst()
+	local tc=Duel.SelectMatchingCard(tp,s.thfilter,tp,LOCATION_DECK,0,1,1,nil)
 	if #tc >0 then
         Duel.SendtoHand(tc,nil,REASON_EFFECT)
     end
@@ -95,7 +95,7 @@ function s.thop(e,tp,eg,ep,ev,re,r,rp)
 	if Duel.IsExistingMatchingCard(s.nsfilter,tp,LOCATION_HAND,0,1,c) then
         if Duel.SelectYesNo(tp,aux.Stringid(id,2)) then
             Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SUMMON)
-	        local tc=Duel.SelectMatchingCard(tp,aux.NecroValleyFilter(s.nsfilter),tp,LOCATION_HAND,0,1,1,nil):GetFirst()
+	        local tc=Duel.SelectMatchingCard(tp,aux.NecroValleyFilter(s.nsfilter),tp,LOCATION_HAND,0,1,1,nil)
             if #tc>0 then
                 Duel.Summon(tp,tc,true,e)
             end
