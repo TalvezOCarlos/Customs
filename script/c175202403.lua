@@ -40,7 +40,7 @@ function s.spfilter(c,e,tp)
     return c:IsSetCard(0xa13f) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
 function s.spcon(e,tp,eg,ep,ev,re,r,rp)
-    return Duel.IsExistingMatchingCard(s.spconfilter,tg,LOCATION_MZONE,0,1,nil)
+    return Duel.IsExistingMatchingCard(s.spconfilter,tp,LOCATION_MZONE,0,1,nil)
 end
 function s.spcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
