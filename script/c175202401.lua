@@ -29,5 +29,5 @@ end
 function s.thsetop(e,tp,eg,ep,ev,re,r,rp)
 	local g=e:GetHandler()
 	Duel.SendtoHand(g,nil,REASON_EFFECT)
-	Duel.ComfirmCards(tp,g)
+	Duel.ConfirmCards(1-tp,g)
 end
