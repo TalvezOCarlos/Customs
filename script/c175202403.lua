@@ -65,7 +65,10 @@ function s.spop(e,tp,eg,ep,ev,re,r,rp)
 		Duel.SpecialSummon(g,0,tp,tp,false,false,POS_FACEUP)
 	end
 end
-
+function s.nsfilter(c)
+    return c:IsSetCard(0xa13f) and c:IsType(TYPE_SPIRIT)
+        and c:IsSummonable(true,nil)
+end
 function s.thfilter(c)
     return c:IsSetCard(0xa13f) and c:IsAbleToHand()
 end
@@ -90,7 +93,7 @@ function s.thop(e,tp,eg,ep,ev,re,r,rp)
         if Duel.SelectYesNo(tp,aux.Stringid(id,2)) then
             Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SUMMON)
 	        local tc=Duel.SelectMatchingCard(tp,aux.NecroValleyFilter(s.nsfilter),tp,LOCATION_HAND,0,1,1,nil):GetFirst()
-            if tc>0 then
+            if #tc>0 then
                 Duel.Summon(tp,tc,true,e)
             end
         end
