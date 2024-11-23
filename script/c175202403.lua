@@ -25,13 +25,14 @@ function s.initial_effect(c)
 	e2:SetOperation(s.thop)
     e2:SetOperation(s.thcost)
 	e2:SetCountLimit(1,{id,1})
-	c:RegisterEffect(e3)
+	c:RegisterEffect(e2)
     local e3=e2:Clone()
 	e3:SetCode(EVENT_SPSUMMON_SUCCESS)
 	c:RegisterEffect(e3)
 end
 
 s.listed_series={0xa13f}
+s.listed_names={id}
 function s.spconfilter(c)
     return c:IsType(TYPE_SPIRIT) and c:IsFaceup()
 end
@@ -70,7 +71,7 @@ function s.nsfilter(c)
         and c:IsSummonable(true,nil)
 end
 function s.thfilter(c)
-    return c:IsSetCard(0xa13f) and c:IsAbleToHand()
+    return c:IsSetCard(0xa13f) and c:IsAbleToHand() and (not c:IsCode(id))
 end
 function s.spcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
