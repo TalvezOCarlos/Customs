@@ -18,14 +18,15 @@ end
 
 s.listed_series={0xa13f}
 function s.spiritfilter(c)
-    return c:IsCanBeNormalSummoned(e,0,tp,false,false) and c:IsType(TYPE_SPIRIT)
+    return c:IsType(TYPE_SPIRIT)
 end
 function s.spfilter(c)
     return c:IsSetCard({0xa13f}) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
 function s.spcon(e,c)
 	if c==nil then return true end
-    return Duel.IsExistingMatchingCard(Card.IsType(TYPE_SPIRIT),0,LOCATION_MZONE,0,1,nil)
+    local tp=c:GetHandler()
+    return Duel.IsExistingMatchingCard(s.spiritfilter,tp,LOCATION_MZONE,0,1,nil)
 end
 function s.spcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
