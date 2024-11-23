@@ -34,7 +34,7 @@ function s.initial_effect(c)
 end
 listed_series={0xa13f}
 function s.thfilter(c)
-	c:ISetCard(0xa13f) and c:IsAbleToHand()
+	c:IsSetCard(0xa13f) and c:IsAbleToHand()
 end
 function s.thsetcon(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
