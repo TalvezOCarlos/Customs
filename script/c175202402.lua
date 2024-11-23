@@ -15,17 +15,17 @@ function s.initial_effect(c)
 	e1:SetOperation(s.spop)
 	c:RegisterEffect(e1)
     -- Draw for each Anima Project Monster
-    local e2=Effect.CreateEffect(c)
-	e2:SetDescription(aux.Stringid(id,1))
-	e2:SetCategory(CATEGORY_DRAW)
-	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
-	e2:SetProperty(EFFECT_FLAG_DELAY)
-	e2:SetCode(EVENT_SPSUMMON_SUCCESS)
-	e2:SetRange(LOCATION_MZONE)
-	e2:SetCountLimit(1,{id,1})
-	e2:SetTarget(s.drwtg)
-	e2:SetOperation(s.drwop)
-	c:RegisterEffect(e2)
+ --   local e2=Effect.CreateEffect(c)
+--	e2:SetDescription(aux.Stringid(id,1))
+--	e2:SetCategory(CATEGORY_DRAW)
+--	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
+--	e2:SetProperty(EFFECT_FLAG_DELAY)
+--	e2:SetCode(EVENT_SPSUMMON_SUCCESS)
+--	e2:SetRange(LOCATION_MZONE)
+--	e2:SetCountLimit(1,{id,1})
+--	e2:SetTarget(s.drwtg)
+--	e2:SetOperation(s.drwop)
+--	c:RegisterEffect(e2)
 end
 
 s.listed_series={0xa13f}
@@ -55,16 +55,16 @@ end
 function s.dfilter(c)
     return c:IsSetCard(0xa13f) and c:IsFaceup()
 end
-function s.drwtg(e,tp,eg,ep,ev,re,r,rp,chk)
-    local ct=Duel.GetMatchingGroup(s.dfilter,tp,LOCATION_MMZONE,0,nil):GetClassCount(Card.GetCode)
-	if chk==0 then return ct>0 and Duel.IsPlayerCanDraw(tp,ct) end
-	Duel.SetTargetPlayer(tp)
-	Duel.SetOperationInfo(0,CATEGORY_DRAW,nil,0,tp,ct)
-end
-function s.drwop(e,tp,eg,ep,ev,re,r,rp)
-	local p=Duel.GetChainInfo(0,CHAININFO_TARGET_PLAYER)
-	local ct=Duel.GetMatchingGroup(s.dfilter,tp,LOCATION_MMZONE,0,nil):GetClassCount(Card.GetCode)
-	if ct>0 then
-		Duel.Draw(p,ct,REASON_EFFECT)
-	end
-end
+--function s.drwtg(e,tp,eg,ep,ev,re,r,rp,chk)
+  --  local ct=Duel.GetMatchingGroup(s.dfilter,tp,LOCATION_MMZONE,0,nil):GetClassCount(Card.GetCode)
+	--if chk==0 then return ct>0 and Duel.IsPlayerCanDraw(tp,ct) end
+	--Duel.SetTargetPlayer(tp)
+	--Duel.SetOperationInfo(0,CATEGORY_DRAW,nil,0,tp,ct)
+--end
+--function s.drwop(e,tp,eg,ep,ev,re,r,rp)
+--	local p=Duel.GetChainInfo(0,CHAININFO_TARGET_PLAYER)
+--	local ct=Duel.GetMatchingGroup(s.dfilter,tp,LOCATION_MMZONE,0,nil):GetClassCount(Card.GetCode)
+--	if ct>0 then
+--		Duel.Draw(p,ct,REASON_EFFECT)
+--	end
+--end
