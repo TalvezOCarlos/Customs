@@ -25,7 +25,7 @@ function s.spfilter(c)
 end
 function s.spcon(e,c,tp)
 	if c==nil then return true end
-    return Duel.IsExistingMatchingCard(s.spiritfilter,tp,LOCATION_MZONE,0,1,nil)
+    return Duel.IsExistingMatchingCard(s.spiritfilter,0,LOCATION_MZONE,0,1,nil)
 end
 function s.spcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
