@@ -100,48 +100,35 @@ function s.syncon(e,tp,eg,ep,ev,re,r,rp)
 	local trig_p=Duel.GetChainInfo(ev,CHAININFO_TRIGGERING_PLAYER)
 	return re and re:IsActivated() and trig_p==tp and (Duel.GetCurrentPhase()&PHASE_MAIN1+PHASE_MAIN2)>0
 end
-function s.synfilter(tc,c,tp)
-	if not tc:IsFaceup() or not tc:IsCanBeSynchroMaterial() then return false end
-	c:RegisterFlagEffect(id,0,0,1)
-	local e1=Effect.CreateEffect(c)
-	e1:SetType(EFFECT_TYPE_SINGLE)
-	e1:SetCode(EFFECT_SYNCHRO_MATERIAL)
-	tc:RegisterEffect(e1,true)
-	local sg=Duel.GetMatchingGroup(Card.IsType(TYPE_SPIRIT),tp,LOCATION_MZONE,0,nil)
-	local mg=Group.FromCards(sg,tc)
-	local res=Duel.IsExistingMatchingCard(Card.IsSynchroSummonable(nil,mg,2,2),tp,LOCATION_EXTRA,0,1,nil,mg)
-	c:ResetFlagEffect(id)
-	e1:Reset()
-	return res
+function s.synfilter(c,mg)
+	return c:IsSynchroSummonable(nil,mg,2,2)
+end
+function s.synmatfilter(c)
+	return c:IsCanBeSynchroMaterial() and c:IsType(TYPE_SPIRIT)
+end
+function s.filter(tc,c,tp)
+	local mg=Group.FromCards(c,tc)
+	return tc:IsFaceup() and tc:IsCanBeSynchroMaterial()
+		and Duel.IsExistingMatchingCard(s.synfilter,tp,LOCATION_EXTRA,0,1,nil,mg)
 end
 function s.syntg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	local sg=Duel.GetMatchingGroup(Card.IsType(TYPE_SPIRIT),tp,LOCATION_MZONE,0,nil)
-	if chkc then return chkc:IsLocation(LOCATION_MZONE) and s.synfilter(chkc,sg,tp) end
-	if chk==0 then return Duel.IsExistingTarget(s.synfilter,tp,LOCATION_MZONE,LOCATION_MZONE,1,nil,sg,tp) end
+	local sg=GetMatchingGroup(s.synmatfilter,tp,LOCATION_MZONE,0,nil)
+	if chkc then return chkc:IsLocation(LOCATION_MZONE) and s.filter(chkc,sg,tp) end
+	if chk==0 then return Duel.IsExistingTarget(s.filter,tp,0,LOCATION_MZONE,1,nil,sg,tp) end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_FACEUP)
-	Duel.SelectTarget(tp,s.synfilter,tp,LOCATION_MZONE,LOCATION_MZONE,1,1,nil,nil,tp)
+	Duel.SelectTarget(tp,s.filter,tp,LOCATION_MZONE,LOCATION_MZONE,1,1,nil,sg,tp)
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_EXTRA)
 end
-function s.spop(e,tp,eg,ep,ev,re,r,rp)
-	local sg=Duel.GetMatchingGroup(Card.IsType(TYPE_SPIRIT),tp,LOCATION_MZONE,0,nil)
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SMATERIAL)
-	local c=sg:Select(tp,1,1,nil):GetFirst()
+function s.synop(e,tp,eg,ep,ev,re,r,rp)
+	local c=GetMatchingGroup(s.synmatfilter,tp,LOCATION_MZONE,0,nil)
 	local tc=Duel.GetFirstTarget()
-	if c:IsRelateToEffect(e) and c:IsFaceup() and tc and tc:IsFaceup() and tc:IsRelateToEffect(e) then
-		c:RegisterFlagEffect(id,0,0,1)
-		local e1=Effect.CreateEffect(c)
-		e1:SetType(EFFECT_TYPE_SINGLE)
-		e1:SetCode(EFFECT_SYNCHRO_MATERIAL)
-		tc:RegisterEffect(e1,true)
+	if c:IsFaceup() and tc:IsFaceup() and tc:IsRelateToEffect(e) and not tc:IsImmuneToEffect(e)then
 		local mg=Group.FromCards(c,tc)
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
 		local g=Duel.SelectMatchingCard(tp,s.synfilter,tp,LOCATION_EXTRA,0,1,1,nil,mg)
 		local sc=g:GetFirst()
 		if sc then
-			Duel.SynchroSummon(tp,sc,nil,mg)
-		else
-			c:ResetFlagEffect(id)
-			e1:Reset()
+			Duel.SynchroSummon(tp,sc,nil,mg,2,2)
 		end
 	end
 end
