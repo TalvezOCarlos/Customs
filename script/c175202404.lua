@@ -16,6 +16,7 @@ function s.initial_effect(c)
     local e2=Effect.CreateEffect(c)
 	e2:SetCategory(CATEGORY_CONTROL)
 	e2:SetType(EFFECT_TYPE_TRIGGER_F)
+	e2:SetProperty(EFFECT_FLAG_DELAY)
 	e2:SetCode(EVENT_SPSUMMON_SUCCESS)
 	e2:SetCondition(s.stcon)
 	e2:SetTarget(s.sttg)
@@ -25,7 +26,7 @@ function s.initial_effect(c)
 end
 
 function s.stfilter(c)
-	return c:IsPreviousLocation(LOCATION_GRAVE) and c:IsFaceup() and c:IsControlerCanBeChanged()
+	return c:IsPreviousLocation(LOCATION_GRAVE) and c:IsControlerCanBeChanged()
 end
 function s.stcon(e,tp,eg,ep,ev,re,r,rp)
 	return eg:IsExists(s.stfilter,1,nil)
