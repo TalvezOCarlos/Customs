@@ -2,7 +2,7 @@
 -- Scripted and Designed by TalvezOCarlos
 local s,id=GetID()
 function s.initial_effect(c)
-	-- Special Summon 1 level 4 Anima Project from hand
+	-- Special Summon from hand
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(id,0))
     e1:SetCategory(CATEGORY_SPECIAL_SUMMON)
@@ -14,7 +14,7 @@ function s.initial_effect(c)
 	e1:SetTarget(s.sptg)
 	e1:SetOperation(s.spop)
 	c:RegisterEffect(e1)
-    -- Add 1 Anima Project then Summon 1 Spirit
+    -- Draw
     local e2=Effect.CreateEffect(c)
 	e2:SetDescription(aux.Stringid(id,1))
 	e2:SetCategory(CATEGORY_DRAW)
@@ -26,6 +26,16 @@ function s.initial_effect(c)
 	e2:SetTarget(s.drwtg)
 	e2:SetOperation(s.drwop)
 	c:RegisterEffect(e2)
+    -- Add from GY
+    local e3=Effect.CreateEffect(c)
+    e3:SetDescription(aux.Stringis(id,2))
+    e3:SetCategory(CATEGORY_TOHAND)
+    e3:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_IGNITION)
+	e3:SetRange(LOCATION_MZONE)
+	e3:SetCountLimit(1,{id,2})
+	e3:SetTarget(s.thtg)
+	e3:SetOperation(s.thop)
+	c:RegisterEffect(e3)
 end
 
 s.listed_series={0xa13f}
@@ -54,8 +64,11 @@ function s.spop(e,tp,eg,ep,ev,re,r,rp)
 	local g=e:GetHandler()
 	Duel.SpecialSummon(g,0,tp,tp,false,false,POS_FACEUP)
 end
+function s.drwfilter(c)
+    return c:IsFaceup() and IsSetCard(0xa13f)
+end
 function s.drwtg(e,tp,eg,ep,ev,re,r,rp,chk)
-	local ct=Duel.GetMatchingGroup(Card.IsFaceup,tp,LOCATION_MMZONE,0,nil):GetClassCount(Card.GetCode)
+	local ct=Duel.GetMatchingGroup(s.drwfilter,tp,LOCATION_MMZONE,0,nil):GetClassCount(Card.GetCode)
 	if chk==0 then return ct>0 and Duel.IsPlayerCanDraw(tp,ct) end
 	Duel.SetTargetPlayer(tp)
 	Duel.SetOperationInfo(0,CATEGORY_DRAW,nil,0,tp,ct)
@@ -66,4 +79,32 @@ function s.drwop(e,tp,eg,ep,ev,re,r,rp)
 	if ct>0 then
 		Duel.Draw(p,ct,REASON_EFFECT)
 	end
+end
+function s.thfilter(c)
+    return c:IsSetCard(0xa13f) and c:IsAbleToHand()
+end
+function s.nsfilter(c)
+    return c:IsSetCard(0xa13f) and c:IsSummonable()
+end
+function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
+    if chk==0 then return Duel.IsExistingMatchingCard(s.thfilter,tp,LOCATION_GRAVE,0,1,nil) end
+    Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
+    local g=Duel.SelectTarget(tp,s.thfilter,tp,LOCATION_GRAVE,0,1,1,nil,e,tp)
+	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_GRAVE)
+    Duel.SetOperationInfo(0,CATEGORY_SUMMON,nil,1,tp,LOCATION_HAND)
+end
+function s.thop(e,tp,eg,ep,ev,re,r,rp)
+    local g=Duel.GetFirstTarget()
+    if g:IsRelateToEffect(e3) then
+        Duel.SendtoHand(g,tp,REASON_EFFECT)
+        Duel.ConfirmCards(1-tp,g)
+        local sg1=Duel.GetMatchingGroup(s.nsfilter,tp,LOCATION_HAND+LOCATION_MZONE,0,nil)
+        if #sg1>0 and Duel.SelectYesNo(tp,aux.Stringid(id,3)) then
+            Duel.BreakEffect()
+            Duel.ShuffleHand(tp)
+            Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SUMMON)
+            local sg2=sg1:Select(tp,1,1,nil):GetFirst()
+            Duel.Summon(tp,sg2,true,nil)
+        end
+    end
 end
