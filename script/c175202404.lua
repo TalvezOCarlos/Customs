@@ -17,13 +17,25 @@ function s.initial_effect(c)
 	e2:SetCategory(CATEGORY_CONTROL)
 	e2:SetType(EFFECT_TYPE_TRIGGER_F+EFFECT_TYPE_FIELD)
 	e2:SetProperty(EFFECT_FLAG_DELAY)
-	e2:SetRange(LOCATION_MZONE)
 	e2:SetCode(EVENT_SPSUMMON_SUCCESS)
 	e2:SetCondition(s.stcon)
 	e2:SetTarget(s.sttg)
 	e2:SetOperation(s.stop)
 	e2:SetCountLimit(1,id)
 	c:RegisterEffect(e2)
+	local e3=Effect.CreateEffect(c)
+	e3:SetCategory(CATEGORY_SUMMON)
+	e3:SetType(EFFECT_TYPE_TRIGGER_O+EFFECT_TYPE_FIELD)
+	e3:SetProperty(EFFECT_FLAG_DELAY)
+	e3:SetCode(EVENT_SPSUMMON_SUCCESS)
+	e3:SetCondition(s.nscon)
+	e3:SetTarget(s.nstg)
+	e3:SetOperation(s.nsop)
+	e3:SetCountLimit(1,{id,1})
+	c:RegisterEffect(e3)
+	local e4=e3:Clone()
+	e4:SetCode(EVENT_SUMMON_SUCCESS)
+	c:RegisterEffect(e4)
 end
 
 function s.stfilter(c)
@@ -42,5 +54,26 @@ function s.stop(e,tp,eg,ep,ev,re,r,rp)
 	local tc=Duel.SelectMatchingCard(tp,s.stfilter,tp,0,LOCATION_MZONE,1,1,nil):GetFirst()
 	if tc then
 		Duel.GetControl(tc,tp,nil,1)
+	end
+end
+function s.nsconfilter(c,tp)
+	return c:IsReason(REASON_EFFECT) and c:GetReasonPlayer()==1-tp
+end
+function s.nsfilter(c)
+    return c:IsSummonable(true,nil) and c:IsType(TYPE_SPIRIT)
+end
+function s.stcon(e,tp,eg,ep,ev,re,r,rp)
+	return eg:IsExists(s.nsconfilter,1,nil)
+end
+function s.nstg(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return Duel.IsExistingMatchingCard(s.nsfilter,tp,LOCATION_HAND,0,1,nil) end
+	Duel.SetOperationInfo(0,CATEGORY_SUMMON,nil,1,tp,LOCATION_HAND)
+end
+function s.nsop(e,tp,eg,ep,ev,re,r,rp)
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SUMMON)
+	local g=Duel.SelectMatchingCard(tp,s.nsfilter,tp,LOCATION_HAND,0,1,1,nil):GetFirst()
+	if #g>0 then
+		BreakEffect()
+		Duel.Summon(tp,g,true,nil)
 	end
 end
