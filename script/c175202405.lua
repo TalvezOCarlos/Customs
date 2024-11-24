@@ -34,6 +34,18 @@ function s.initial_effect(c)
 	local e5=e2:Clone()
 	e5:SetCode(EVENT_SPSUMMON_SUCCESS)
 	c:RegisterEffect(e5)
+	-- Destroy
+	local e6=Effect.CreateEffect(c)
+	e6:SetDescription(aux.Stringid(id,0))
+	e6:SetCategory(CATEGORY_DESTROY)
+	e6:SetProperty(EFFECT_FLAG_DELAY+EFFECT_FLAG_CARD_TARGET)
+	e6:SetType(EFFECT_TYPE_TRIGGER_O+EFFECT_TYPE_SINGLE)
+	e6:SetCode(EVENT_SPSUMMON_SUCCESS)
+	e6:SetCondition(s.dscon)
+	e6:SetTarget(s.dstg)
+	e6:SetOperation(s.dsop)
+	e6:SetCountLimit(1,{id,1})
+	c:RegisterEffect(e6)
 end
 s.listed_series={0xa13f}
 function s.spfilter(c)
@@ -59,5 +71,18 @@ function s.spop(e,tp,eg,ep,ev,re,r,rp)
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
 		local sg=g:Select(tp,1,1,nil)
 		Duel.SynchroSummon(tp,sg:GetFirst(),nil,mg)
+	end
+end
+function s.dstg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+	if chkc then return chkc:IsOnField() end
+	if chk==0 then return Duel.IsExistingTarget(aux.TRUE,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,nil) end
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_DESTROY)
+	local g=Duel.SelectTarget(tp,aux.TRUE,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,1,1,nil)
+	Duel.SetOperationInfo(0,CATEGORY_DESTROY,g,1,0,0)
+end
+function s.dsop(e,tp,eg,ep,ev,re,r,rp)
+	local tc=Duel.GetFirstTarget()
+	if tc and tc:IsRelateToEffect(e) then
+		Duel.Destroy(tc,REASON_EFFECT)
 	end
 end
