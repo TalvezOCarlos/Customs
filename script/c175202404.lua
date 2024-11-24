@@ -52,7 +52,7 @@ function s.initial_effect(c)
 	e4:SetCountLimit(1,{id,2})
 	c:RegisterEffect(e4)
 end
-s.listed_series{0xa13f}
+s.listed_series={0xa13f}
 function s.stfilter(c)
 	return c:IsPreviousLocation(LOCATION_GRAVE) and c:IsControlerCanBeChanged() and c:IsFaceup()
 end
@@ -99,14 +99,14 @@ end
 function s.synfilter(c,mg)
 	return c:IsSynchroSummonable(nil,mg,2,2) and c:IsSetCard(0xa13f)
 end
-function s.sctg(e,tp,eg,ep,ev,re,r,rp,chk)
+function s.syntg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then
 		local mg=Duel.GetMatchingGroup(Card.IsFaceup,tp,LOCATION_MZONE,0,nil)
 		return Duel.IsExistingMatchingCard(s.synfilter,tp,LOCATION_EXTRA,0,1,nil,nil,mg)
 	end
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_EXTRA)
 end
-function s.scop(e,tp,eg,ep,ev,re,r,rp)
+function s.synop(e,tp,eg,ep,ev,re,r,rp)
 	local mg=Duel.GetMatchingGroup(Card.IsFaceup,tp,LOCATION_MZONE,0,nil)
 	local g=Duel.GetMatchingGroup(s.synfilter,tp,LOCATION_EXTRA,0,nil,nil,mg)
 	if #g>0 then
