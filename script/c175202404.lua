@@ -71,12 +71,11 @@ end
 function s.nsop(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SUMMON)
 	local sg1=Duel.GetMatchingGroup(s.nsfilter,tp,LOCATION_HAND+LOCATION_MZONE,0,nil)
-        if #sg1>0 then
-            Duel.BreakEffect()
-            Duel.ShuffleHand(tp)
-            Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SUMMON)
-            local sg2=sg1:Select(tp,1,1,nil):GetFirst()
-            Duel.Summon(tp,sg2,true,nil)
-        end
+    if #sg1>0 then
+		Duel.BreakEffect()
+        Duel.ShuffleHand(tp)
+        Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SUMMON)
+        local sg2=sg1:Select(tp,1,1,nil):GetFirst()
+        Duel.Summon(tp,sg2,true,nil)
     end
 end
