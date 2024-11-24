@@ -57,14 +57,12 @@ function s.stop(e,tp,eg,ep,ev,re,r,rp)
 		Duel.GetControl(tc,tp,nil,1)
 	end
 end
-function s.nsconfilter(c,tp)
-	return c:IsReason(REASON_EFFECT) and c:GetReasonPlayer()==1-tp
-end
 function s.nsfilter(c)
     return c:IsSummonable(true,nil) and c:IsType(TYPE_SPIRIT)
 end
 function s.nscon(e,tp,eg,ep,ev,re,r,rp)
-	return eg:IsExists(s.nsconfilter,1,nil)
+	local trig_p=Duel.GetChainInfo(ev,CHAININFO_TRIGGERING_PLAYER)
+	return re and re:IsActivated() and trig_p==1-tp
 end
 function s.nstg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(s.nsfilter,tp,LOCATION_HAND,0,1,nil) end
