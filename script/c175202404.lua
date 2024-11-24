@@ -27,10 +27,10 @@ function s.initial_effect(c)
 end
 
 function s.stfilter(c)
-	return c:IsPreviousLocation(LOCATION_GRAVE) and c:IsControlerCanBeChanged()
+	return c:IsPreviousLocation(LOCATION_GRAVE) and c:IsControlerCanBeChanged() and c:IsFaceup()
 end
 function s.stcon(e,tp,eg,ep,ev,re,r,rp)
-	return eg:IsExistingMatchingCard(s.stfilter,tp,0,LOCATION_MZONE,1,nil)
+	return eg:IsExists(s.stfilter,1,nil)
 end
 function s.sttg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(s.stfilter,tp,0,LOCATION_MZONE,1,nil) end
