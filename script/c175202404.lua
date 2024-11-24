@@ -112,7 +112,7 @@ function s.filter(tc,c,tp)
 		and Duel.IsExistingMatchingCard(s.synfilter,tp,LOCATION_EXTRA,0,1,nil,mg)
 end
 function s.syntg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	local sg=Duel.GetMatchingGroup(s.synmatfilter,tp,LOCATION_MZONE,0,nil)
+	local sg=Duel.GetMatchingGroup(s.synmatfilter,tp,LOCATION_MZONE,0,nil):GetFirst()
 	if chkc then return chkc:IsLocation(LOCATION_MZONE) and s.filter(chkc,sg,tp) end
 	if chk==0 then return Duel.IsExistingTarget(s.filter,tp,0,LOCATION_MZONE,1,nil,sg,tp) end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_FACEUP)
