@@ -25,37 +25,34 @@ function s.initial_effect(c)
 	e2:SetOperation(s.stop)
 	e2:SetCountLimit(1,id)
 	c:RegisterEffect(e2)
+	-- Normal Summon 1 Spirit
 	local e3=Effect.CreateEffect(c)
 	e3:SetDescription(aux.Stringid(id,1))
 	e3:SetCategory(CATEGORY_SUMMON)
 	e3:SetType(EFFECT_TYPE_TRIGGER_O+EFFECT_TYPE_FIELD)
 	e3:SetProperty(EFFECT_FLAG_DELAY)
 	e3:SetRange(LOCATION_MZONE)
-	e3:SetCode(EVENT_SUMMON_SUCCESS)
+	e3:SetCode(EVENT_SPSUMMON_SUCCESS)
 	e3:SetCondition(s.nscon)
 	e3:SetTarget(s.nstg)
 	e3:SetOperation(s.nsop)
 	e3:SetCountLimit(1,{id,1})
 	c:RegisterEffect(e3)
-	local e4=e3:Clone()
-	e4:SetCode(EVENT_SPSUMMON_SUCCESS)
+	-- Synchro Summon
+	local e4=Effect.CreateEffect(c)
+	e4:SetDescription(aux.Stringid(id,2))
+	e4:SetCategory(CATEGORY_SPECIAL_SUMMON)
+	e4:SetType(EFFECT_TYPE_TRIGGER_O+EFFECT_TYPE_FIELD)
+	e4:SetProperty(EFFECT_FLAG_DELAY+EFFECT_FLAG_CARD_TARGET)
+	e4:SetRange(LOCATION_MZONE)
+	e4:SetCode(EVENT_SUMMON_SUCCESS)
+	e4:SetCondition(s.syncon)
+	e4:SetTarget(s.syntg)
+	e4:SetOperation(s.synop)
+	e4:SetCountLimit(1,{id,2})
 	c:RegisterEffect(e4)
-	local e5=Effect.CreateEffect(c)
-	e5:SetDescription(aux.Stringid(id,2))
-	e5:SetCategory(CATEGORY_SPECIAL_SUMMON)
-	e5:SetType(EFFECT_TYPE_TRIGGER_O+EFFECT_TYPE_FIELD)
-	e5:SetProperty(EFFECT_FLAG_DELAY+EFFECT_FLAG_CARD_TARGET)
-	e5:SetRange(LOCATION_MZONE)
-	e5:SetCode(EVENT_SUMMON_SUCCESS)
-	e5:SetCondition(s.syncon)
-	e5:SetTarget(s.syntg)
-	e5:SetOperation(s.synop)
-	e5:SetCountLimit(1,{id,2})
-	c:RegisterEffect(e5)
-	local e6=e5:Clone()
-	e6:SetCode(EVENT_SPSUMMON_SUCCESS)
-	c:RegisterEffect(e6)
 end
+s.listed_series{0xa13f}
 function s.stfilter(c)
 	return c:IsPreviousLocation(LOCATION_GRAVE) and c:IsControlerCanBeChanged() and c:IsFaceup()
 end
@@ -97,38 +94,24 @@ function s.nsop(e,tp,eg,ep,ev,re,r,rp)
     end
 end
 function s.syncon(e,tp,eg,ep,ev,re,r,rp)
-	local trig_p=Duel.GetChainInfo(ev,CHAININFO_TRIGGERING_PLAYER)
-	return re and re:IsActivated() and trig_p==tp and (Duel.GetCurrentPhase()&PHASE_MAIN1+PHASE_MAIN2)>0
+	return (Duel.GetCurrentPhase()&PHASE_MAIN1+PHASE_MAIN2)>0
 end
 function s.synfilter(c,mg)
-	return c:IsSynchroSummonable(nil,mg,2,2)
+	return c:IsSynchroSummonable(nil,mg,2,2) and c:IsSetCard(0xa13f)
 end
-function s.synmatfilter(c)
-	return c:IsCanBeSynchroMaterial() and c:IsType(TYPE_SPIRIT)
-end
-function s.filter(tc,c,tp)
-	local mg=Group.FromCards(c,tc)
-	return tc:IsFaceup() and tc:IsCanBeSynchroMaterial()
-		and Duel.IsExistingMatchingCard(s.synfilter,tp,LOCATION_EXTRA,0,1,nil,mg)
-end
-function s.syntg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	local sg=Duel.GetMatchingGroup(s.synmatfilter,tp,LOCATION_MZONE,0,nil):GetFirst()
-	if chkc then return chkc:IsLocation(LOCATION_MZONE) and s.filter(chkc,sg,tp) end
-	if chk==0 then return Duel.IsExistingTarget(s.filter,tp,0,LOCATION_MZONE,1,nil,sg,tp) end
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_FACEUP)
-	Duel.SelectTarget(tp,s.filter,tp,LOCATION_MZONE,LOCATION_MZONE,1,1,nil,sg,tp)
+function s.sctg(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then
+		local mg=Duel.GetMatchingGroup(Card.IsFaceup,tp,LOCATION_MZONE,0,nil)
+		return Duel.IsExistingMatchingCard(s.synfilter,tp,LOCATION_EXTRA,0,1,nil,nil,mg)
+	end
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_EXTRA)
 end
-function s.synop(e,tp,eg,ep,ev,re,r,rp)
-	local c=Duel.GetMatchingGroup(s.synmatfilter,tp,LOCATION_MZONE,0,nil)
-	local tc=Duel.GetFirstTarget()
-	if c:IsFaceup() and tc:IsFaceup() and tc:IsRelateToEffect(e) and not tc:IsImmuneToEffect(e)then
-		local mg=Group.FromCards(c,tc)
+function s.scop(e,tp,eg,ep,ev,re,r,rp)
+	local mg=Duel.GetMatchingGroup(Card.IsFaceup,tp,LOCATION_MZONE,0,nil)
+	local g=Duel.GetMatchingGroup(s.synfilter,tp,LOCATION_EXTRA,0,nil,nil,mg)
+	if #g>0 then
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
-		local g=Duel.SelectMatchingCard(tp,s.synfilter,tp,LOCATION_EXTRA,0,1,1,nil,mg)
-		local sc=g:GetFirst()
-		if sc then
-			Duel.SynchroSummon(tp,sc,nil,mg,2,2)
-		end
+		local sg=g:Select(tp,1,1,nil)
+		Duel.SynchroSummon(tp,sg:GetFirst(),nil,mg)
 	end
 end
