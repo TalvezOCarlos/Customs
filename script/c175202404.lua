@@ -70,10 +70,13 @@ function s.nstg(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 function s.nsop(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SUMMON)
-	local sg=Duel.SelectMatchingCard(tp,s.nsfilter,tp,LOCATION_HAND,0,1,1,nil)
-	if sg>0 then
-		BreakEffect()
-		sg2=sg:GetFirst()
-		Duel.Summon(tp,sg2,true,nil)
-	end
+	local sg1=Duel.GetMatchingGroup(s.nsfilter,tp,LOCATION_HAND+LOCATION_MZONE,0,nil)
+        if #sg1>0 then
+            Duel.BreakEffect()
+            Duel.ShuffleHand(tp)
+            Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SUMMON)
+            local sg2=sg1:Select(tp,1,1,nil):GetFirst()
+            Duel.Summon(tp,sg2,true,nil)
+        end
+    end
 end
