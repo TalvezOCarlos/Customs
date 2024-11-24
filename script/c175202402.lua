@@ -65,7 +65,7 @@ function s.spop(e,tp,eg,ep,ev,re,r,rp)
 	Duel.SpecialSummon(g,0,tp,tp,false,false,POS_FACEUP)
 end
 function s.drwfilter(c)
-    return c:IsFaceup() and c:IsSetCard(0xa13f)
+    return c:IsFaceup() and c:IsType(TYPE_SPIRIT)
 end
 function s.drwtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	local ct=Duel.GetMatchingGroup(s.drwfilter,tp,LOCATION_MMZONE,0,nil):GetClassCount(Card.GetCode)
