@@ -95,7 +95,7 @@ function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 function s.thop(e,tp,eg,ep,ev,re,r,rp)
     local g=Duel.GetFirstTarget()
-    if g:IsRelateToEffect(e3) then
+    if g:IsRelateToEffect(e) then
         Duel.SendtoHand(g,tp,REASON_EFFECT)
         Duel.ConfirmCards(1-tp,g)
         local sg1=Duel.GetMatchingGroup(s.nsfilter,tp,LOCATION_HAND+LOCATION_MZONE,0,nil)
