@@ -85,6 +85,7 @@ function s.thfilter(c)
 end
 function s.nsfilter(c)
     return c:IsSetCard(0xa13f) and c:IsSummonable(true,nil)
+    and c:IsType(TYPE_SPIRIT)
 end
 function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
     if chk==0 then return Duel.IsExistingMatchingCard(s.thfilter,tp,LOCATION_GRAVE,0,1,nil) end
