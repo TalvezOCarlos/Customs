@@ -29,17 +29,17 @@ function s.stfilter(c)
 	return c:IsPreviousLocation(LOCATION_GRAVE) and c:IsControlerCanBeChanged()
 end
 function s.stcon(e,tp,eg,ep,ev,re,r,rp)
-	return eg:IsExists(s.stfilter,1,nil)
+	return eg:IsExistingMatchingCard(s.stfilter,tp,0,LOCATION_MZONE,1,nil)
 end
 function s.sttg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(s.stfilter,tp,0,LOCATION_MZONE,1,nil) end
-	local g=Duel.GetFieldGroup(tp,0,LOCATION_MZONE):Filter(s.stfilter,nil)
+	local g=Duel.GetMatchingGroup(s.stfilter,tp,0,LOCATION_MZONE,nil)
 	Duel.SetOperationInfo(0,CATEGORY_CONTROL,g,1,0,0)
 end
 function s.stop(e,tp,eg,ep,ev,re,r,rp)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_CONTROL)
 	local tc=Duel.SelectMatchingCard(tp,s.stfilter,tp,0,LOCATION_MZONE,1,1,nil):GetFirst()
 	if tc then
-		Duel.GetControl(tc,tp,PHASE_END,1)
+		Duel.GetControl(tc,tp,nil,1)
 	end
 end

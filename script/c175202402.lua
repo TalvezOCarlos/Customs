@@ -75,7 +75,7 @@ function s.drwtg(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 function s.drwop(e,tp,eg,ep,ev,re,r,rp)
 	local p=Duel.GetChainInfo(0,CHAININFO_TARGET_PLAYER)
-	local ct=Duel.GetMatchingGroup(Card.IsFaceup,tp,LOCATION_MMZONE,0,nil):GetClassCount(Card.GetCode)
+	local ct=Duel.GetMatchingGroup(s.drwfilter,tp,LOCATION_MMZONE,0,nil):GetClassCount(Card.GetCode)
 	if ct>0 then
 		Duel.Draw(p,ct,REASON_EFFECT)
 	end
