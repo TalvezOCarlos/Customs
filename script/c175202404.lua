@@ -62,7 +62,7 @@ end
 function s.nsfilter(c)
     return c:IsSummonable(true,nil) and c:IsType(TYPE_SPIRIT)
 end
-function s.stcon(e,tp,eg,ep,ev,re,r,rp)
+function s.nscon(e,tp,eg,ep,ev,re,r,rp)
 	return eg:IsExists(s.nsconfilter,1,nil)
 end
 function s.nstg(e,tp,eg,ep,ev,re,r,rp,chk)
