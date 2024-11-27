@@ -36,7 +36,7 @@ function s.tdtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.SetOperationInfo(0,CATEGORY_TOEXTRA,nil,1,tp,LOCATION_MZONE)
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,2,tp,LOCATION_GRAVE)
 end
-function s.spfilter(c)
+function s.spfilter(c,e,tp)
 	return c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_SPECIAL,tp,false,false) and c:IsSetCard(0xa13f)
 end
 function s.tdop(e,tp,eg,ep,ev,re,r,rp)
