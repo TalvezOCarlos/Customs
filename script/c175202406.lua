@@ -37,13 +37,13 @@ function s.tdtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,2,tp,LOCATION_GRAVE)
 end
 function s.spfilter(c)
-	return c:IsCanBeSpecialSummoned() and c:IsSetCard(0xa13f)
+	return c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_SPECIAL,tp,false,false) and c:IsSetCard(0xa13f)
 end
 function s.tdop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	if not (c:IsRelateToEffect(e) and Duel.SendtoDeck(c,nil,SEQ_DECKSHUFFLE,REASON_EFFECT)>0 and c:IsLocation(LOCATION_EXTRA)) then return end
 	local sg1=Duel.GetMatchingGroup(s.spfilter,tp,LOCATION_GRAVE,0,nil)
-    if #sg1>0 and Duel.SelectYesNo(tp,aux.Stringid(id,1)) then
+    if #sg1>1 and Duel.SelectYesNo(tp,aux.Stringid(id,1)) then
         Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SUMMON)
         local sg2=sg1:Select(tp,2,2,nil)
         Duel.SpecialSummon(sg2,0,tp,tp,false,false,POS_FACEUP)
