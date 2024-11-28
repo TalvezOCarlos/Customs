@@ -24,6 +24,23 @@ function s.initial_effect(c)
 	e2:SetTarget(s.tdtg)
 	e2:SetOperation(s.tdop)
 	c:RegisterEffect(e2)
+	--Negate
+	local e3=Effect.CreateEffect(c)
+	e3:SetDescription(aux.Stringid(id,2))
+	e3:SetType(EFFECT_TYPE_FIELD)
+	e3:SetCode(EFFECT_DISABLE)
+	e3:SetRange(LOCATION_MZONE)
+	e3:SetTargetRange(LOCATION_MZONE,LOCATION_MZONE)
+	e3:SetTarget(aux.TargetBoolFunction(Card.IsRace,RACE_SPELLCASTER))
+	c:RegisterEffect(e3)
+	local e4=e3:Clone()
+	e4:SetCode(EFFECT_UPDATE_ATTACK)
+	e4:SetValue(-c:GetAttack())
+	c:RegisterEffect(e4)
+	local e5=e3:Clone()
+	e5:SetCode(EFFECT_UPDATE_DEFENSE)
+	e5:SetValue(-c:GetDefense())
+	c:RegisterEffect(e5)
 end
 s.listed_series={0xa13f}
 
@@ -43,7 +60,7 @@ function s.tdop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	if not (c:IsRelateToEffect(e) and Duel.SendtoDeck(c,nil,SEQ_DECKSHUFFLE,REASON_EFFECT)>0 and c:IsLocation(LOCATION_EXTRA)) then return end
     local g=Duel.SelectMatchingCard(tp,s.spfilter,tp,LOCATION_GRAVE,0,2,2,nil,e,tp)
-	if #g>1 then
+	if #g>1 and Duel.SelectYesNo(tp,aux.Stringid(id,1)) then
 		Duel.SpecialSummon(g,0,tp,tp,false,false,POS_FACEUP)
 	end
 end
