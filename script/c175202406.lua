@@ -31,7 +31,7 @@ function s.initial_effect(c)
 	e3:SetCode(EFFECT_DISABLE)
 	e3:SetRange(LOCATION_MZONE)
 	e3:SetTargetRange(LOCATION_MZONE,LOCATION_MZONE)
-	e3:SetTarget(aux.TargetBoolFunction(Card.IsRace,RACE_SPELLCASTER))
+	e3:SetTarget(aux.TargetBoolFunction(Card.IsPreviousLocation,LOCATION_GRAVE))
 	c:RegisterEffect(e3)
 	local e4=e3:Clone()
 	e4:SetCode(EFFECT_UPDATE_ATTACK)
@@ -64,3 +64,5 @@ function s.tdop(e,tp,eg,ep,ev,re,r,rp)
 		Duel.SpecialSummon(g,0,tp,tp,false,false,POS_FACEUP)
 	end
 end
+function s.ngtg()
+	return 
