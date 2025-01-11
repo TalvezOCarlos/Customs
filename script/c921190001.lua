@@ -5,11 +5,10 @@ function s.initial_effect(c)
 	local e1=Effect.CreateEffect(c)
     e1:SetCategory(CATEGORY_TOHAND + CATEGORY_SEARCH)
 	e1:SetType(EFFECT_TYPE_SINGLE + EFFECT_TYPE_TRIGGER_O)
-	e1:SetCode(EVENT_SUMMON_SUCCES)
+	e1:SetCode(EVENT_SUMMON_SUCCESS)
     e1:SetTarget(s.thtg)
     e1:SetCondition(s.thop)
 	c:RegisterEffect(e1)
-	
     -- SUMMON FROM GY
 
     local e2 = Effect.CreateEffect(c)
