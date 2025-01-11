@@ -11,6 +11,6 @@ function s.initial_effect(c)
 	
 end
 s.listed_series={0x21f}
-
+s.listed_codes={921190003}
 
 
