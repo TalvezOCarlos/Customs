@@ -29,6 +29,7 @@ function s.initial_effect(c)
 	local e4=Effect.CreateEffect(c)
 	e4:SetType(EFFECT_TYPE_IGNITION)
 	e4:SetRange(LOCATION_GRAVE)
+	e4:SetCountLimit(1,{id,1})
 	e4:SetTarget(s.target)
 	e4:SetOperation(s.operation)
 	c:RegisterEffect(e4)
@@ -53,9 +54,9 @@ function s.atkval(e,c)
 	return Duel.GetFieldGroupCount(c:GetControler(),0,LOCATION_MZONE)*300
 end
 function s.copyfilter(c)
-	return c:IsSetCard(0xa5) and c:IsType(TYPE_QUICKPLAY) and c:IsAbleToRemoveAsCost()
-		and c:CheckActivateEffect(false,true,false)~=nil
-		and c:CheckActivateEffect(false,true,false):GetOperation()~=nil
+	return c:IsSetCard(0xa5) and c:IsType(TYPE_QUICKPLAY) and c:IsAbleToDeckAsCost()
+		and c:CheckActivateEffect(false,false,false)~=nil
+		and c:CheckActivateEffect(false,false,false):GetOperation()~=nil
 end
 function s.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then
@@ -63,10 +64,11 @@ function s.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 		return tg and tg(e,tp,eg,ep,ev,re,r,rp,0,chkc)
 	end
 	local c=e:GetHandler()
-	if chk==0 then return c:IsAbleToRemoveAsCost() and Duel.IsExistingMatchingCard(s.copyfilter,tp,LOCATION_GRAVE,0,1,nil) end
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
+	if chk==0 then return c:IsAbleToDeckAsCost() and Duel.IsExistingMatchingCard(s.copyfilter,tp,LOCATION_GRAVE,0,1,nil) end
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
 	local tc=Duel.SelectMatchingCard(tp,s.copyfilter,tp,LOCATION_GRAVE,0,1,1,nil):GetFirst()
-	Duel.Remove(Group.FromCards(tc,c),POS_FACEUP,REASON_COST)
+	Duel.Remove(c,POS_FACEUP,REASON_COST)
+	Duel.SendtoDeck(tc,nil,SEQ_DECKSHUFFLE,REASON_COST)
 	local te=tc:CheckActivateEffect(true,true,false)
 	e:SetLabel(te:GetLabel())
 	e:SetLabelObject(te:GetLabelObject())
