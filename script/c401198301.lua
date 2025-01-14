@@ -32,7 +32,7 @@ function s.initial_effect(c)
 	e4:SetHintTiming(0,TIMING_BATTLE_START+TIMING_BATTLE_END+TIMING_ATTACK)
 	e4:SetRange(LOCATION_GRAVE)
 	e4:SetCountLimit(1,{id,1})
-	e4:SetCondition(s.condition)
+	e4:SetCondition(function() return Duel.IsBattlePhase() end)
 	e4:SetTarget(s.target)
 	e4:SetOperation(s.operation)
 	c:RegisterEffect(e4)
@@ -55,10 +55,6 @@ function s.thop(e,tp,eg,ep,ev,re,r,rp)
 end
 function s.atkval(e,c)
 	return Duel.GetFieldGroupCount(c:GetControler(),0,LOCATION_MZONE)*300
-end
-function s.condition(e,tp,eg,ep,ev,re,r,rp)
-	local ph=Duel.GetCurrentPhase()
-	return ph==PHASE_BATTLE
 end
 function s.copyfilter(c)
 	return c:IsSetCard(0xa5) and c:IsType(TYPE_QUICKPLAY) and c:IsAbleToRemoveAsCost()
