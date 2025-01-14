@@ -25,6 +25,15 @@ function s.initial_effect(c)
 	e3:SetRange(LOCATION_MZONE)
 	e3:SetValue(s.atkval)
 	c:RegisterEffect(e3)
+	--Copy the effect of 1 "Change" Spell in your GY
+	local e4=Effect.CreateEffect(c)
+	e4:SetType(EFFECT_TYPE_IGNITION)
+	e4:SetRange(LOCATION_GRAVE)
+	e4:SetCountLimit(1,id)
+	e4:SetTarget(s.target)
+	e4:SetOperation(s.operation)
+	c:RegisterEffect(e4)
+end
 end
 s.listed_series={0xa5}
 function s.filter(c)
@@ -43,5 +52,42 @@ function s.thop(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 function s.atkval(e,c)
-	return Duel.GetFieldGroupCount(c:GetControler(),0,LOCATION_MZONE)*500
+	return Duel.GetFieldGroupCount(c:GetControler(),0,LOCATION_MZONE)*300
+end
+function s.copyfilter(c)
+	return c:IsSetCard(0xa5) and c:IsType(TYPE_QUICKPLAY) and c:IsAbleToDeckAsCost()
+		and c:CheckActivateEffect(false,true,false)~=nil
+		and c:CheckActivateEffect(false,true,false):GetOperation()~=nil
+end
+function s.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+	if chkc then
+		local te=e:GetLabelObject()
+		return tg and tg(e,tp,eg,ep,ev,re,r,rp,0,chkc)
+	end
+	local c=e:GetHandler()
+	if chk==0 then return c:IsAbleToDeckAsCost() and Duel.IsExistingMatchingCard(s.copyfilter,tp,LOCATION_GRAVE,0,1,nil) end
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
+	local tc=Duel.SelectMatchingCard(tp,s.copyfilter,tp,LOCATION_GRAVE,0,1,1,nil):GetFirst()
+	Duel.Remove(c,POS_FACEUP,REASON_COST)
+	Duel.SendtoDeck(tc,nil,SEQ_DECKSHUFFLE,REASON_COST)
+	local te=tc:CheckActivateEffect(true,true,false)
+	e:SetLabel(te:GetLabel())
+	e:SetLabelObject(te:GetLabelObject())
+	local tg=te:GetTarget()
+	if tg then tg(e,tp,eg,ep,ev,re,r,rp,1) end
+	te:SetLabel(e:GetLabel())
+	te:SetLabelObject(e:GetLabelObject())
+	e:SetLabelObject(te)
+	Duel.ClearOperationInfo(0)
+end
+function s.operation(e,tp,eg,ep,ev,re,r,rp)
+	local te=e:GetLabelObject()
+	if te then
+		e:SetLabel(te:GetLabel())
+		e:SetLabelObject(te:GetLabelObject())
+		local op=te:GetOperation()
+		if op then op(e,tp,eg,ep,ev,re,r,rp) end
+		te:SetLabel(e:GetLabel())
+		te:SetLabelObject(e:GetLabelObject())
+	end
 end
