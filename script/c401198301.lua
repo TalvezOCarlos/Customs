@@ -55,8 +55,8 @@ function s.atkval(e,c)
 end
 function s.copyfilter(c)
 	return c:IsSetCard(0xa5) and c:IsType(TYPE_QUICKPLAY) and c:IsAbleToDeckAsCost()
-		and c:CheckActivateEffect(false,true,false)~=nil
-		and c:CheckActivateEffect(false,true,false):GetOperation()~=nil
+		and c:CheckActivateEffect(false,false,false)~=nil
+		and c:CheckActivateEffect(false,false,false):GetOperation()~=nil
 end
 function s.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then
