@@ -10,19 +10,6 @@ function s.initial_effect(c)
     e1:SetTarget(s.thtg)
     e1:SetCondition(s.thop)
 	c:RegisterEffect(e1)
-    -- SUMMON FROM GY
-    local e2 = Effect.CreateEffect(c)
-    e2:SetCategory(CATEGORY_SPECIAL_SUMMON + CATEGORY_LEAVE_GRAVE)
-    e2:SetType(EFFECT_TYPE_FIELD + EFFECT_TYPE_TRIGGER_O)
-    e2:SetRange(LOCATION_GRAVE)
-    e2:SetProperty(EFFECT_FLAG_DAMAGE_STEP + EFFECT_FLAG_DELAY + EFFECT_FLAG2_CHECK_SIMULTANEOUS)
-    e2:SetCode(EVENT_TO_GRAVE)
-    e2:SetCondition(s.spcon)
-    e2:SetCost(s.spcos)
-    e2:SetTarget(s.sptg)
-    e2:SetOperation(s.spop)
-    c:RegisterEffect(e2)
-    
 end
 s.listed_series={0x21f}
 s.listed_names={921190003}
